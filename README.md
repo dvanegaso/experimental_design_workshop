@@ -1,6 +1,10 @@
 ## Taller de diseño experimental.
 
-Esta es la página oficial del taller de diseño experimental. Vas a encontrar los siguientes contenidos:
+Para la página del taller accede al link:
+
+https://dvanegaso.github.io/experimental_design_workshop/
+
+En el taller vas a encontrar los siguientes contenidos:
 
 - Diseño Completamente Aleatorizado.
 - Diseño en Bloques Completamente Aleatorizado.
@@ -19,3 +23,4 @@ Para pruebas de normalidad en este código se aplicaron las siguientes:
 En general se deben manejar varias pruebas ya que las pruebas de normalidad son de baja potencia. Tambien se recomienda hacer uso del gráfico QQ-plot para los residuales, así como graficar los modelos (con solo la instrucción `plot()` de R base se pueden hacer diagnosticos de modelos).
 
 Por otro lado, para las pruebas de homocedasticidad de residuos se recomienda usar la prueba de Levene (`levene.test()`) del paquete `car`; ya que no pierde tanta potencia ante la no normalidad. En caso de probarse la normalidad de residuales, se recomienda tambien la prueba usual de Bartlett `bartlett.test()`.
+
