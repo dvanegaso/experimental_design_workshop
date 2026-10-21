@@ -1,0 +1,31 @@
+project:
+  type: website
+  output-dir: docs
+
+lang: es
+
+website:
+  title: "Taller Diseño Experimental"
+  navbar:
+    left:
+      - text: "DCA"
+        href: index.qmd
+      - text: "DBCA"
+        href: about.qmd
+      - text: "DCL"
+        href: cuadro_latino.qmd
+
+format:
+  html:
+    theme: flatly
+    css: styles.css
+    toc: true
+    toc-title: "En esta página"
+    code-fold: true
+    code-summary: "Ver código"
+    code-tools: true
+    code-copy: true
+
+execute:
+  warning: false
+  message: false

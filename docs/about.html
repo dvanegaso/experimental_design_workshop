@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>DBCA · Diseño en bloques completos al azar – Taller Diseño Experimental</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7bb31cd2f4999533cab70d7f7b501715.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Taller Diseño Experimental</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Buscar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navegación de palanca" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">DCA</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./about.html" aria-current="page"> 
+<span class="menu-text">DBCA</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./cuadro_latino.html"> 
+<span class="menu-text">DCL</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#el-experimento" id="toc-el-experimento" class="nav-link active" data-scroll-target="#el-experimento">1. El experimento</a>
+  <ul class="collapse">
+  <li><a href="#contexto" id="toc-contexto" class="nav-link" data-scroll-target="#contexto">Contexto</a></li>
+  <li><a href="#descripción-completa" id="toc-descripción-completa" class="nav-link" data-scroll-target="#descripción-completa">Descripción completa</a></li>
+  </ul></li>
+  <li><a href="#el-modelo" id="toc-el-modelo" class="nav-link" data-scroll-target="#el-modelo">2. El modelo</a></li>
+  <li><a href="#simulación-de-la-proporción" id="toc-simulación-de-la-proporción" class="nav-link" data-scroll-target="#simulación-de-la-proporción">3. Simulación de la proporción</a></li>
+  <li><a href="#análisis-con-la-respuesta-original" id="toc-análisis-con-la-respuesta-original" class="nav-link" data-scroll-target="#análisis-con-la-respuesta-original">4. Análisis con la respuesta original</a>
+  <ul class="collapse">
+  <li><a href="#diagnóstico-de-los-residuales" id="toc-diagnóstico-de-los-residuales" class="nav-link" data-scroll-target="#diagnóstico-de-los-residuales">Diagnóstico de los residuales</a></li>
+  </ul></li>
+  <li><a href="#transformación-tipo-johnson" id="toc-transformación-tipo-johnson" class="nav-link" data-scroll-target="#transformación-tipo-johnson">5. Transformación tipo Johnson</a>
+  <ul class="collapse">
+  <li><a href="#la-idea" id="toc-la-idea" class="nav-link" data-scroll-target="#la-idea">La idea</a></li>
+  <li><a href="#la-función" id="toc-la-función" class="nav-link" data-scroll-target="#la-función">La función</a></li>
+  <li><a href="#aplicación-a-la-proporción" id="toc-aplicación-a-la-proporción" class="nav-link" data-scroll-target="#aplicación-a-la-proporción">Aplicación a la proporción</a></li>
+  </ul></li>
+  <li><a href="#análisis-con-la-respuesta-transformada" id="toc-análisis-con-la-respuesta-transformada" class="nav-link" data-scroll-target="#análisis-con-la-respuesta-transformada">6. Análisis con la respuesta transformada</a>
+  <ul class="collapse">
+  <li><a href="#medias-en-la-escala-original" id="toc-medias-en-la-escala-original" class="nav-link" data-scroll-target="#medias-en-la-escala-original">Medias en la escala original</a></li>
+  </ul></li>
+  <li><a href="#valió-la-pena-bloquear" id="toc-valió-la-pena-bloquear" class="nav-link" data-scroll-target="#valió-la-pena-bloquear">7. ¿Valió la pena bloquear?</a></li>
+  <li><a href="#alternativas-a-johnson" id="toc-alternativas-a-johnson" class="nav-link" data-scroll-target="#alternativas-a-johnson">8. Alternativas a Johnson</a></li>
+  <li><a href="#ventajas-y-desventajas-del-dbca" id="toc-ventajas-y-desventajas-del-dbca" class="nav-link" data-scroll-target="#ventajas-y-desventajas-del-dbca">9. Ventajas y desventajas del DBCA</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">DBCA · Diseño en bloques completos al azar</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Código</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Mostrar todo el código</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Ocultar todo el código</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">Ver el código fuente</a></li></ul></div></div>
+<p class="subtitle lead">Un gradiente de campo y una respuesta en forma de proporción</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="el-experimento" class="level2">
+<h2 class="anchored" data-anchor-id="el-experimento">1. El experimento</h2>
+<section id="contexto" class="level3">
+<h3 class="anchored" data-anchor-id="contexto">Contexto</h3>
+<p>Un productor de papa quiere comparar <strong>cuatro tratamientos</strong> contra el tizón tardío (<em>Phytophthora infestans</em>). Los tratamientos son: un testigo sin aplicación y tres fungicidas.</p>
+<p>El lote está en <strong>ladera</strong>. La parte alta drena más rápido. La parte baja acumula humedad. La humedad favorece la enfermedad. El lote <strong>no es homogéneo</strong>.</p>
+<p>Un DCA mezclaría el efecto de la pendiente con el efecto del fungicida. Por eso se usa un <strong>bloque</strong>: una franja del lote perpendicular a la pendiente. Dentro de cada franja las parcelas se parecen entre sí.</p>
+</section>
+<section id="descripción-completa" class="level3">
+<h3 class="anchored" data-anchor-id="descripción-completa">Descripción completa</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Elemento</th>
+<th>En este experimento</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Objetivo</strong></td>
+<td>Comparar la severidad del tizón entre cuatro tratamientos.</td>
+</tr>
+<tr class="even">
+<td><strong>Población</strong></td>
+<td>Parcelas de papa del lote, de la misma variedad y siembra.</td>
+</tr>
+<tr class="odd">
+<td><strong>Factor</strong></td>
+<td>Tratamiento (cuatro niveles).</td>
+</tr>
+<tr class="even">
+<td><strong>Tratamientos</strong></td>
+<td>Testigo, Cobre, Azoxistrobina, Mancozeb.</td>
+</tr>
+<tr class="odd">
+<td><strong>Factor de bloqueo</strong></td>
+<td>Franja del lote a lo largo de la pendiente (12 bloques).</td>
+</tr>
+<tr class="even">
+<td><strong>Unidad experimental</strong></td>
+<td>La <strong>parcela</strong>. Cada bloque tiene 4 parcelas.</td>
+</tr>
+<tr class="odd">
+<td><strong>Variable respuesta</strong></td>
+<td>Proporción del área foliar con lesiones (valor entre 0 y 1).</td>
+</tr>
+<tr class="even">
+<td><strong>Aleatorización</strong></td>
+<td>Dentro de <strong>cada bloque</strong>, se sortean los 4 tratamientos entre las 4 parcelas.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="el-modelo" class="level2">
+<h2 class="anchored" data-anchor-id="el-modelo">2. El modelo</h2>
+<p><span class="math display">\[
+y_{ij} = \mu + \tau_i + \beta_j + \varepsilon_{ij}, \qquad i = 1,\dots,4; \quad j = 1,\dots,12
+\]</span></p>
+<p>con <span class="math inline">\(\varepsilon_{ij} \overset{iid}{\sim} N(0, \sigma^2)\)</span>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Término</th>
+<th>Significado</th>
+<th>Por qué es una fuente de variación</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(y_{ij}\)</span></td>
+<td>Proporción de área afectada en el bloque <span class="math inline">\(j\)</span> con el tratamiento <span class="math inline">\(i\)</span></td>
+<td>Es lo que se mide.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mu\)</span></td>
+<td>Media general</td>
+<td>Es el punto de referencia común.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\tau_i\)</span></td>
+<td>Efecto del tratamiento <span class="math inline">\(i\)</span></td>
+<td><strong>Fuente de interés.</strong> El investigador eligió los tratamientos. El efecto es <strong>fijo</strong>.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\beta_j\)</span></td>
+<td>Efecto del bloque <span class="math inline">\(j\)</span></td>
+<td><strong>Fuente conocida y no deseada.</strong> La pendiente cambia la humedad y la presión de la enfermedad. Se <strong>separa</strong> del error.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\varepsilon_{ij}\)</span></td>
+<td>Error experimental</td>
+<td><strong>Fuente no controlada.</strong> Es la variación entre parcelas <strong>dentro</strong> de un bloque.</td>
+</tr>
+</tbody>
+</table>
+<p>Dos ideas importantes:</p>
+<ol type="1">
+<li><strong>El bloque no es un tratamiento.</strong> No se prueba su efecto. Se incluye para <strong>restarlo</strong> del error.</li>
+<li><strong>No hay interacción bloque × tratamiento.</strong> Cada celda tiene una sola parcela. El modelo supone que los tratamientos actúan igual en todos los bloques (aditividad).</li>
+</ol>
+<p>Los grados de libertad son:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Fuente</th>
+<th>GL</th>
+<th>Valor aquí</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bloque</td>
+<td><span class="math inline">\(b-1\)</span></td>
+<td>11</td>
+</tr>
+<tr class="even">
+<td>Tratamiento</td>
+<td><span class="math inline">\(t-1\)</span></td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>Error</td>
+<td><span class="math inline">\((b-1)(t-1)\)</span></td>
+<td>33</td>
+</tr>
+<tr class="even">
+<td>Total</td>
+<td><span class="math inline">\(bt-1\)</span></td>
+<td>47</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="simulación-de-la-proporción" class="level2">
+<h2 class="anchored" data-anchor-id="simulación-de-la-proporción">3. Simulación de la proporción</h2>
+<p>Una proporción vive en el intervalo (0, 1). Cerca de cero tiene <strong>asimetría a la derecha</strong>. Su varianza depende de su media. Por eso el supuesto de normalidad suele fallar.</p>
+<p>Se simula la proporción en la escala logit, con un error amplio. Esto produce valores pequeños frecuentes y algunos valores altos.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nortest)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"funciones.R"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">34</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>tratamientos <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Testigo"</span>, <span class="st">"Cobre"</span>, <span class="st">"Azoxistrobina"</span>, <span class="st">"Mancozeb"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">12</span>                                   <span class="co"># bloques</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>efecto_logit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.5</span>, <span class="sc">-</span><span class="fl">3.2</span>, <span class="sc">-</span><span class="fl">3.8</span>, <span class="sc">-</span><span class="fl">3.5</span>) <span class="co"># media en escala logit</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Aleatorización: dentro de cada bloque, orden aleatorio de los tratamientos</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>diseno <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span>b, <span class="cf">function</span>(j) {</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">bloque =</span> j, <span class="at">parcela =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">tratamiento =</span> <span class="fu">sample</span>(tratamientos))</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Efecto de bloque (gradiente de la ladera) y error experimental</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>efecto_bloque <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(b, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">1.0</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>diseno<span class="sc">$</span>bloque     <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">paste0</span>(<span class="st">"B"</span>, diseno<span class="sc">$</span>bloque), <span class="at">levels =</span> <span class="fu">paste0</span>(<span class="st">"B"</span>, <span class="dv">1</span><span class="sc">:</span>b))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>diseno<span class="sc">$</span>tratamiento <span class="ot">&lt;-</span> <span class="fu">factor</span>(diseno<span class="sc">$</span>tratamiento, <span class="at">levels =</span> tratamientos)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">&lt;-</span> efecto_logit[<span class="fu">as.integer</span>(diseno<span class="sc">$</span>tratamiento)] <span class="sc">+</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  efecto_bloque[<span class="fu">as.integer</span>(diseno<span class="sc">$</span>bloque)] <span class="sc">+</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rnorm</span>(<span class="fu">nrow</span>(diseno), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>diseno<span class="sc">$</span>prop <span class="ot">&lt;-</span> <span class="fu">plogis</span>(eta)   <span class="co"># proporción en (0, 1)</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diseno, <span class="dv">8</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  bloque parcela   tratamiento         prop
+1     B1       1       Testigo 0.1151027830
+2     B1       2      Mancozeb 0.0064363672
+3     B1       3 Azoxistrobina 0.0055101258
+4     B1       4         Cobre 0.0007366242
+5     B2       1         Cobre 0.0021705150
+6     B2       2      Mancozeb 0.0193688743
+7     B2       3 Azoxistrobina 0.0614659256
+8     B2       4       Testigo 0.1812885139</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Sobre la semilla
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Se probaron varias semillas y se escogió la <strong>34</strong>. Esta semilla produce residuales claramente no normales. Con otras semillas la normalidad puede no fallar con solo 48 parcelas. En un estudio real no se escoge la semilla: se diagnostica lo que salga.</p>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(prop <span class="sc">~</span> tratamiento, <span class="at">data =</span> diseno,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"#ffcdd2"</span>, <span class="st">"#c8e6c9"</span>, <span class="st">"#a5d6a7"</span>, <span class="st">"#81c784"</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Proporción de área foliar afectada"</span>, <span class="at">xlab =</span> <span class="st">"Tratamiento"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Severidad del tizón por tratamiento"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="about_files/figure-html/boxplot-dbca-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="análisis-con-la-respuesta-original" class="level2">
+<h2 class="anchored" data-anchor-id="análisis-con-la-respuesta-original">4. Análisis con la respuesta original</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>m_crudo <span class="ot">&lt;-</span> <span class="fu">lm</span>(prop <span class="sc">~</span> bloque <span class="sc">+</span> tratamiento, <span class="at">data =</span> diseno)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(m_crudo)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: prop
+            Df  Sum Sq  Mean Sq F value  Pr(&gt;F)  
+bloque      11 0.50681 0.046074  2.2069 0.03905 *
+tratamiento  3 0.26407 0.088024  4.2162 0.01249 *
+Residuals   33 0.68896 0.020878                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<section id="diagnóstico-de-los-residuales" class="level3">
+<h3 class="anchored" data-anchor-id="diagnóstico-de-los-residuales">Diagnóstico de los residuales</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>d_crudo <span class="ot">&lt;-</span> <span class="fu">diagnostico</span>(m_crudo, diseno<span class="sc">$</span>tratamiento)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>d_crudo<span class="sc">$</span>normalidad</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>            prueba estadistico  valor_p           decision
+1     Shapiro-Wilk      0.9020 0.000728 Rechaza normalidad
+2 Anderson-Darling      1.5704 0.000421 Rechaza normalidad
+3 Lilliefors (K-S)      0.1428 0.015700 Rechaza normalidad</code></pre>
+</div>
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>d_crudo<span class="sc">$</span>levene</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    prueba estadistico     gl valor_p
+1 Levene (centro: mediana)      1.3641 3 y 44   0.266
+                     decision
+1 No rechaza homocedasticidad</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">graficos_diagnostico</span>(m_crudo)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="about_files/figure-html/graf-original-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Advertencia</span>Los residuales no son normales
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Las tres pruebas de normalidad rechazan el supuesto. El gráfico Q-Q muestra puntos extremos que se alejan de la recta, sobre todo arriba. El gráfico de residuales muestra que la dispersión crece con el valor ajustado. El ANOVA sobre la proporción original <strong>no es confiable</strong>. Hace falta una transformación.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="transformación-tipo-johnson" class="level2">
+<h2 class="anchored" data-anchor-id="transformación-tipo-johnson">5. Transformación tipo Johnson</h2>
+<section id="la-idea" class="level3">
+<h3 class="anchored" data-anchor-id="la-idea">La idea</h3>
+<p>El sistema de Johnson lleva una variable no normal a una normal con una función de tres familias:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Familia</th>
+<th>Transformación</th>
+<th>Cuándo se usa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>SB</strong> (acotada)</td>
+<td><span class="math inline">\(z = \gamma + \delta \ln\!\dfrac{y-\xi}{\xi+\lambda-y}\)</span></td>
+<td>La variable vive en un intervalo <span class="math inline">\((\xi,\ \xi+\lambda)\)</span>. <strong>Es el caso de las proporciones.</strong></td>
+</tr>
+<tr class="even">
+<td><strong>SL</strong> (log-normal)</td>
+<td><span class="math inline">\(z = \gamma + \delta \ln(y-\xi)\)</span></td>
+<td>La variable tiene un límite inferior y cola derecha.</td>
+</tr>
+<tr class="odd">
+<td><strong>SU</strong> (no acotada)</td>
+<td><span class="math inline">\(z = \gamma + \delta\, \mathrm{asinh}\!\dfrac{y-\xi}{\lambda}\)</span></td>
+<td>La variable no tiene límites.</td>
+</tr>
+</tbody>
+</table>
+<p>Los parámetros <span class="math inline">\(\gamma\)</span> y <span class="math inline">\(\delta\)</span> centran y escalan. Los parámetros <span class="math inline">\(\xi\)</span> y <span class="math inline">\(\lambda\)</span> fijan la <strong>posición</strong> y la <strong>amplitud</strong> del intervalo.</p>
+</section>
+<section id="la-función" class="level3">
+<h3 class="anchored" data-anchor-id="la-función">La función</h3>
+<p>El paquete <code>Johnson</code> no siempre está disponible. Esta función en R base ajusta las tres familias. Elige la familia y los parámetros que <strong>maximizan el estadístico W de Shapiro–Wilk</strong> de la variable transformada.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>johnson_transformar <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(x); xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(x); rango <span class="ot">&lt;-</span> xmax <span class="sc">-</span> xmin</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  W   <span class="ot">&lt;-</span> <span class="cf">function</span>(v) <span class="cf">if</span> (<span class="fu">any</span>(<span class="sc">!</span><span class="fu">is.finite</span>(v))) <span class="dv">0</span> <span class="cf">else</span> <span class="fu">unname</span>(<span class="fu">shapiro.test</span>(v)<span class="sc">$</span>statistic)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  lim <span class="ot">&lt;-</span> <span class="cf">function</span>(p) <span class="fu">pmin</span>(<span class="fu">pmax</span>(p, <span class="sc">-</span><span class="dv">10</span>), <span class="dv">6</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># SB: límites a, b fuera del rango observado</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  f_sb <span class="ot">&lt;-</span> <span class="cf">function</span>(p, x) {</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">lim</span>(p); a <span class="ot">&lt;-</span> xmin <span class="sc">-</span> <span class="fu">exp</span>(p[<span class="dv">1</span>]) <span class="sc">*</span> rango; b <span class="ot">&lt;-</span> xmax <span class="sc">+</span> <span class="fu">exp</span>(p[<span class="dv">2</span>]) <span class="sc">*</span> rango</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> (x <span class="sc">-</span> a) <span class="sc">/</span> (b <span class="sc">-</span> a); <span class="fu">log</span>(u <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> u))</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  o_sb <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="fu">log</span>(.<span class="dv">05</span>), <span class="fu">log</span>(.<span class="dv">05</span>)), <span class="cf">function</span>(p) <span class="sc">-</span><span class="fu">W</span>(<span class="fu">f_sb</span>(p, x)), <span class="at">method =</span> <span class="st">"Nelder-Mead"</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># SL: log-normal desplazada</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  f_sl <span class="ot">&lt;-</span> <span class="cf">function</span>(p, x) <span class="fu">log</span>(x <span class="sc">-</span> (xmin <span class="sc">-</span> <span class="fu">exp</span>(<span class="fu">lim</span>(p)) <span class="sc">*</span> rango))</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  o_sl <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">log</span>(.<span class="dv">05</span>), <span class="cf">function</span>(p) <span class="sc">-</span><span class="fu">W</span>(<span class="fu">f_sl</span>(p, x)),</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">method =</span> <span class="st">"Brent"</span>, <span class="at">lower =</span> <span class="sc">-</span><span class="dv">10</span>, <span class="at">upper =</span> <span class="dv">6</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># SU: no acotada</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  f_su <span class="ot">&lt;-</span> <span class="cf">function</span>(p, x) <span class="fu">asinh</span>((x <span class="sc">-</span> p[<span class="dv">1</span>]) <span class="sc">/</span> <span class="fu">exp</span>(p[<span class="dv">2</span>]))</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  o_su <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="fu">median</span>(x), <span class="fu">log</span>(<span class="fu">sd</span>(x))), <span class="cf">function</span>(p) <span class="sc">-</span><span class="fu">W</span>(<span class="fu">f_su</span>(p, x)), <span class="at">method =</span> <span class="st">"Nelder-Mead"</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  cand <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">SB =</span> <span class="fu">list</span>(<span class="at">o =</span> o_sb, <span class="at">f =</span> f_sb),</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">SL =</span> <span class="fu">list</span>(<span class="at">o =</span> o_sl, <span class="at">f =</span> f_sl),</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>               <span class="at">SU =</span> <span class="fu">list</span>(<span class="at">o =</span> o_su, <span class="at">f =</span> f_su))</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  Ws   <span class="ot">&lt;-</span> <span class="fu">sapply</span>(cand, <span class="cf">function</span>(k) <span class="sc">-</span>k<span class="sc">$</span>o<span class="sc">$</span>value)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>  tipo <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">which.max</span>(Ws))</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>  p    <span class="ot">&lt;-</span> cand[[tipo]]<span class="sc">$</span>o<span class="sc">$</span>par</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>  crudo <span class="ot">&lt;-</span> cand[[tipo]]<span class="sc">$</span><span class="fu">f</span>(p, x)</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>  delta <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">sd</span>(crudo)          <span class="co"># escala</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>  gamma <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">mean</span>(crudo) <span class="sc">*</span> delta   <span class="co"># centro</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Parámetros de posición y amplitud (xi, lambda)</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>  pars <span class="ot">&lt;-</span> <span class="cf">switch</span>(tipo,</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">SB =</span> <span class="fu">c</span>(<span class="at">xi =</span> xmin <span class="sc">-</span> <span class="fu">exp</span>(<span class="fu">lim</span>(p)[<span class="dv">1</span>]) <span class="sc">*</span> rango,</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>           <span class="at">lambda =</span> (xmax <span class="sc">+</span> <span class="fu">exp</span>(<span class="fu">lim</span>(p)[<span class="dv">2</span>]) <span class="sc">*</span> rango) <span class="sc">-</span> (xmin <span class="sc">-</span> <span class="fu">exp</span>(<span class="fu">lim</span>(p)[<span class="dv">1</span>]) <span class="sc">*</span> rango)),</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">SL =</span> <span class="fu">c</span>(<span class="at">xi =</span> xmin <span class="sc">-</span> <span class="fu">exp</span>(<span class="fu">lim</span>(p)) <span class="sc">*</span> rango, <span class="at">lambda =</span> <span class="cn">NA</span>),</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">SU =</span> <span class="fu">c</span>(<span class="at">xi =</span> p[<span class="dv">1</span>], <span class="at">lambda =</span> <span class="fu">exp</span>(p[<span class="dv">2</span>])))</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">tipo =</span> tipo, <span class="at">W_por_familia =</span> Ws, <span class="at">gamma =</span> gamma, <span class="at">delta =</span> delta,</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>       <span class="at">xi =</span> <span class="fu">unname</span>(pars[<span class="st">"xi"</span>]), <span class="at">lambda =</span> <span class="fu">unname</span>(pars[<span class="st">"lambda"</span>]),</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> gamma <span class="sc">+</span> delta <span class="sc">*</span> crudo)</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformación inversa: de la escala z a la escala original</span></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>johnson_inversa <span class="ot">&lt;-</span> <span class="cf">function</span>(j, z) {</span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> (z <span class="sc">-</span> j<span class="sc">$</span>gamma) <span class="sc">/</span> j<span class="sc">$</span>delta</span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span>(j<span class="sc">$</span>tipo,</span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">SB =</span> j<span class="sc">$</span>xi <span class="sc">+</span> j<span class="sc">$</span>lambda <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>s)),</span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">SL =</span> j<span class="sc">$</span>xi <span class="sc">+</span> <span class="fu">exp</span>(s),</span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">SU =</span> j<span class="sc">$</span>xi <span class="sc">+</span> j<span class="sc">$</span>lambda <span class="sc">*</span> <span class="fu">sinh</span>(s))</span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="aplicación-a-la-proporción" class="level3">
+<h3 class="anchored" data-anchor-id="aplicación-a-la-proporción">Aplicación a la proporción</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>j <span class="ot">&lt;-</span> <span class="fu">johnson_transformar</span>(diseno<span class="sc">$</span>prop)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>diseno<span class="sc">$</span>prop_j <span class="ot">&lt;-</span> j<span class="sc">$</span>y</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>j<span class="sc">$</span>tipo</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "SB"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(j<span class="sc">$</span>W_por_familia, <span class="dv">4</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    SB     SL     SU 
+0.9693 0.9366 0.9366 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">gamma =</span> j<span class="sc">$</span>gamma, <span class="at">delta =</span> j<span class="sc">$</span>delta, <span class="at">xi =</span> j<span class="sc">$</span>xi, <span class="at">lambda =</span> j<span class="sc">$</span>lambda), <span class="dv">4</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> gamma  delta     xi lambda 
+1.3336 0.4315 0.0006 0.9797 </code></pre>
+</div>
+</div>
+<p>La familia elegida es <strong>SB</strong>. Esto tiene sentido: la proporción es una variable acotada.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Dos advertencias
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>La función ajusta los parámetros sobre <strong>toda la respuesta</strong>, no sobre los residuales. Es la práctica habitual de los programas estadísticos.</li>
+<li>Al maximizar W en la misma muestra, el resultado es algo optimista. Use la transformación como ayuda, no como prueba de normalidad.</li>
+</ol>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="análisis-con-la-respuesta-transformada" class="level2">
+<h2 class="anchored" data-anchor-id="análisis-con-la-respuesta-transformada">6. Análisis con la respuesta transformada</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>m_j <span class="ot">&lt;-</span> <span class="fu">lm</span>(prop_j <span class="sc">~</span> bloque <span class="sc">+</span> tratamiento, <span class="at">data =</span> diseno)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(m_j)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: prop_j
+            Df Sum Sq Mean Sq F value   Pr(&gt;F)   
+bloque      11 19.863  1.8057  3.5158 0.002473 **
+tratamiento  3 10.188  3.3962  6.6125 0.001272 **
+Residuals   33 16.949  0.5136                    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>d_j <span class="ot">&lt;-</span> <span class="fu">diagnostico</span>(m_j, diseno<span class="sc">$</span>tratamiento)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>d_j<span class="sc">$</span>normalidad</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>            prueba estadistico valor_p              decision
+1     Shapiro-Wilk      0.9816   0.647 No rechaza normalidad
+2 Anderson-Darling      0.2092   0.855 No rechaza normalidad
+3 Lilliefors (K-S)      0.0582   0.952 No rechaza normalidad</code></pre>
+</div>
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>d_j<span class="sc">$</span>levene</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    prueba estadistico     gl valor_p
+1 Levene (centro: mediana)      1.1651 3 y 44   0.334
+                     decision
+1 No rechaza homocedasticidad</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">graficos_diagnostico</span>(m_j)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="about_files/figure-html/graf-johnson-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Compare con la sección 4. Los valores p de normalidad suben. El gráfico Q-Q se acerca a la recta.</p>
+<section id="medias-en-la-escala-original" class="level3">
+<h3 class="anchored" data-anchor-id="medias-en-la-escala-original">Medias en la escala original</h3>
+<p>El resultado se debe reportar en la escala de la proporción. Se promedia en la escala transformada y se aplica la función inversa.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>medias_z <span class="ot">&lt;-</span> <span class="fu">tapply</span>(diseno<span class="sc">$</span>prop_j, diseno<span class="sc">$</span>tratamiento, mean)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">tratamiento =</span> <span class="fu">names</span>(medias_z),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">media_z     =</span> <span class="fu">round</span>(<span class="fu">as.numeric</span>(medias_z), <span class="dv">3</span>),</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">proporcion  =</span> <span class="fu">round</span>(<span class="fu">johnson_inversa</span>(j, <span class="fu">as.numeric</span>(medias_z)), <span class="dv">4</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    tratamiento media_z proporcion
+1       Testigo   0.765     0.2076
+2         Cobre  -0.294     0.0226
+3 Azoxistrobina  -0.417     0.0172
+4      Mancozeb  -0.054     0.0383</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Interpretación
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La media retro-transformada se parece a una <strong>mediana</strong>, no a la media aritmética. Dígalo en el informe.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="valió-la-pena-bloquear" class="level2">
+<h2 class="anchored" data-anchor-id="valió-la-pena-bloquear">7. ¿Valió la pena bloquear?</h2>
+<p>La <strong>eficiencia relativa</strong> compara el DBCA con un DCA hipotético:</p>
+<p><span class="math display">\[
+ER = \frac{(b-1)\,CM_{\text{bloque}} + b\,(t-1)\,CM_{\text{error}}}{(bt-1)\,CM_{\text{error}}}
+\]</span></p>
+<p>Una <span class="math inline">\(ER &gt; 1\)</span> indica que el DCA habría necesitado <strong>más réplicas</strong> para igualar la precisión del DBCA. Por ejemplo, una <span class="math inline">\(ER = 1{,}5\)</span> significa que el DCA necesitaría un 50 % más de parcelas por tratamiento.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Ver código</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>tab  <span class="ot">&lt;-</span> <span class="fu">anova</span>(m_j)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>CMB  <span class="ot">&lt;-</span> tab[<span class="st">"bloque"</span>, <span class="st">"Mean Sq"</span>]</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>CME  <span class="ot">&lt;-</span> tab[<span class="st">"Residuals"</span>, <span class="st">"Mean Sq"</span>]</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>t_   <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>ER <span class="ot">&lt;-</span> ((b <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> CMB <span class="sc">+</span> b <span class="sc">*</span> (t_ <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> CME) <span class="sc">/</span> ((b <span class="sc">*</span> t_ <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> CME)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(ER, <span class="dv">3</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.589</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="alternativas-a-johnson" class="level2">
+<h2 class="anchored" data-anchor-id="alternativas-a-johnson">8. Alternativas a Johnson</h2>
+<p>Johnson no es la única opción para una proporción.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Opción</th>
+<th>Idea</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Logit</strong></td>
+<td><span class="math inline">\(\ln\frac{y}{1-y}\)</span></td>
+<td>Simple. Falla si hay ceros o unos exactos.</td>
+</tr>
+<tr class="even">
+<td><strong>Arcoseno–raíz</strong></td>
+<td><span class="math inline">\(\arcsin\sqrt{y}\)</span></td>
+<td>Tradicional en agronomía. Hoy se desaconseja.</td>
+</tr>
+<tr class="odd">
+<td><strong>Regresión beta</strong></td>
+<td>Modelo con distribución beta</td>
+<td>Modela la proporción sin transformar. Paquete <code>betareg</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>GLM binomial</strong></td>
+<td>Si hay conteos (n lesionadas de N)</td>
+<td>Usa la información del denominador.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="ventajas-y-desventajas-del-dbca" class="level2">
+<h2 class="anchored" data-anchor-id="ventajas-y-desventajas-del-dbca">9. Ventajas y desventajas del DBCA</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Ventajas</th>
+<th>Desventajas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Precisión</strong></td>
+<td>Separa la variación del gradiente. Reduce el error experimental.</td>
+<td>Pierde GL del error: <span class="math inline">\((b-1)\)</span> grados se van al bloque.</td>
+</tr>
+<tr class="even">
+<td><strong>Validez</strong></td>
+<td>Controla un gradiente conocido. Evita la confusión con el tratamiento.</td>
+<td>Si el bloqueo es inútil, el diseño pierde potencia.</td>
+</tr>
+<tr class="odd">
+<td><strong>Flexibilidad</strong></td>
+<td>Admite cualquier número de tratamientos.</td>
+<td>Cada bloque debe contener <strong>todos</strong> los tratamientos.</td>
+</tr>
+<tr class="even">
+<td><strong>Datos perdidos</strong></td>
+<td>—</td>
+<td>Una parcela perdida desbalancea el diseño. Exige estimar el dato faltante o usar un modelo mixto.</td>
+</tr>
+<tr class="odd">
+<td><strong>Supuestos</strong></td>
+<td>—</td>
+<td>Supone aditividad: sin interacción bloque × tratamiento.</td>
+</tr>
+<tr class="even">
+<td><strong>Control local</strong></td>
+<td>Controla <strong>un</strong> gradiente.</td>
+<td>No controla un segundo gradiente. Para eso existe el cuadro latino.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Siguiente paso
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Continúe con <strong>DCL</strong>. Allí se controlan <strong>dos</strong> gradientes a la vez.</p>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Ejecutar el código</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "DBCA · Diseño en bloques completos al azar"</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Un gradiente de campo y una respuesta en forma de proporción"</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. El experimento</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">### Contexto</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>Un productor de papa quiere comparar **cuatro tratamientos** contra el tizón tardío (*Phytophthora infestans*). Los tratamientos son: un testigo sin aplicación y tres fungicidas.</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>El lote está en **ladera**. La parte alta drena más rápido. La parte baja acumula humedad. La humedad favorece la enfermedad. El lote **no es homogéneo**.</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>Un DCA mezclaría el efecto de la pendiente con el efecto del fungicida. Por eso se usa un **bloque**: una franja del lote perpendicular a la pendiente. Dentro de cada franja las parcelas se parecen entre sí.</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="fu">### Descripción completa</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Elemento <span class="pp">|</span> En este experimento <span class="pp">|</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Objetivo** <span class="pp">|</span> Comparar la severidad del tizón entre cuatro tratamientos. <span class="pp">|</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Población** <span class="pp">|</span> Parcelas de papa del lote, de la misma variedad y siembra. <span class="pp">|</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Factor** <span class="pp">|</span> Tratamiento (cuatro niveles). <span class="pp">|</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Tratamientos** <span class="pp">|</span> Testigo, Cobre, Azoxistrobina, Mancozeb. <span class="pp">|</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Factor de bloqueo** <span class="pp">|</span> Franja del lote a lo largo de la pendiente (12 bloques). <span class="pp">|</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Unidad experimental** | La **parcela**. Cada bloque tiene 4 parcelas. <span class="pp">|</span></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Variable respuesta** <span class="pp">|</span> Proporción del área foliar con lesiones (valor entre 0 y 1). <span class="pp">|</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Aleatorización** | Dentro de **cada bloque**, se sortean los 4 tratamientos entre las 4 parcelas. <span class="pp">|</span></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. El modelo</span></span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>y_{ij} = \mu + \tau_i + \beta_j + \varepsilon_{ij}, \qquad i = 1,\dots,4; \quad j = 1,\dots,12</span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>con $\varepsilon_{ij} \overset{iid}{\sim} N(0, \sigma^2)$.</span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Término <span class="pp">|</span> Significado <span class="pp">|</span> Por qué es una fuente de variación <span class="pp">|</span></span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $y_{ij}$ <span class="pp">|</span> Proporción de área afectada en el bloque $j$ con el tratamiento $i$ <span class="pp">|</span> Es lo que se mide. <span class="pp">|</span></span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mu$ <span class="pp">|</span> Media general <span class="pp">|</span> Es el punto de referencia común. <span class="pp">|</span></span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\tau_i$ <span class="pp">|</span> Efecto del tratamiento $i$ <span class="pp">|</span> **Fuente de interés.** El investigador eligió los tratamientos. El efecto es **fijo**. <span class="pp">|</span></span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\beta_j$ <span class="pp">|</span> Efecto del bloque $j$ <span class="pp">|</span> **Fuente conocida y no deseada.** La pendiente cambia la humedad y la presión de la enfermedad. Se **separa** del error. <span class="pp">|</span></span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\varepsilon_{ij}$ <span class="pp">|</span> Error experimental <span class="pp">|</span> **Fuente no controlada.** Es la variación entre parcelas **dentro** de un bloque. <span class="pp">|</span></span>
+<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>Dos ideas importantes:</span>
+<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**El bloque no es un tratamiento.** No se prueba su efecto. Se incluye para **restarlo** del error.</span>
+<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**No hay interacción bloque × tratamiento.** Cada celda tiene una sola parcela. El modelo supone que los tratamientos actúan igual en todos los bloques (aditividad).</span>
+<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>Los grados de libertad son:</span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Fuente <span class="pp">|</span> GL <span class="pp">|</span> Valor aquí <span class="pp">|</span></span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Bloque <span class="pp">|</span> $b-1$ <span class="pp">|</span> 11 <span class="pp">|</span></span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Tratamiento <span class="pp">|</span> $t-1$ <span class="pp">|</span> 3 <span class="pp">|</span></span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Error <span class="pp">|</span> $(b-1)(t-1)$ <span class="pp">|</span> 33 <span class="pp">|</span></span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Total <span class="pp">|</span> $bt-1$ <span class="pp">|</span> 47 <span class="pp">|</span></span>
+<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Simulación de la proporción</span></span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>Una proporción vive en el intervalo (0, 1). Cerca de cero tiene **asimetría a la derecha**. Su varianza depende de su media. Por eso el supuesto de normalidad suele fallar.</span>
+<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a>Se simula la proporción en la escala logit, con un error amplio. Esto produce valores pequeños frecuentes y algunos valores altos.</span>
+<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: paquetes</span></span>
+<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb30-74"><a href="#cb30-74" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nortest)</span>
+<span id="cb30-75"><a href="#cb30-75" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"funciones.R"</span>)</span>
+<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-81"><a href="#cb30-81" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: simulacion-dbca</span></span>
+<span id="cb30-82"><a href="#cb30-82" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">34</span>)</span>
+<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-84"><a href="#cb30-84" aria-hidden="true" tabindex="-1"></a>tratamientos <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Testigo"</span>, <span class="st">"Cobre"</span>, <span class="st">"Azoxistrobina"</span>, <span class="st">"Mancozeb"</span>)</span>
+<span id="cb30-85"><a href="#cb30-85" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">12</span>                                   <span class="co"># bloques</span></span>
+<span id="cb30-86"><a href="#cb30-86" aria-hidden="true" tabindex="-1"></a>efecto_logit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.5</span>, <span class="sc">-</span><span class="fl">3.2</span>, <span class="sc">-</span><span class="fl">3.8</span>, <span class="sc">-</span><span class="fl">3.5</span>) <span class="co"># media en escala logit</span></span>
+<span id="cb30-87"><a href="#cb30-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-88"><a href="#cb30-88" aria-hidden="true" tabindex="-1"></a><span class="co"># Aleatorización: dentro de cada bloque, orden aleatorio de los tratamientos</span></span>
+<span id="cb30-89"><a href="#cb30-89" aria-hidden="true" tabindex="-1"></a>diseno <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span>b, <span class="cf">function</span>(j) {</span>
+<span id="cb30-90"><a href="#cb30-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">bloque =</span> j, <span class="at">parcela =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb30-91"><a href="#cb30-91" aria-hidden="true" tabindex="-1"></a>             <span class="at">tratamiento =</span> <span class="fu">sample</span>(tratamientos))</span>
+<span id="cb30-92"><a href="#cb30-92" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb30-93"><a href="#cb30-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-94"><a href="#cb30-94" aria-hidden="true" tabindex="-1"></a><span class="co"># Efecto de bloque (gradiente de la ladera) y error experimental</span></span>
+<span id="cb30-95"><a href="#cb30-95" aria-hidden="true" tabindex="-1"></a>efecto_bloque <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(b, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">1.0</span>)</span>
+<span id="cb30-96"><a href="#cb30-96" aria-hidden="true" tabindex="-1"></a>diseno<span class="sc">$</span>bloque     <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">paste0</span>(<span class="st">"B"</span>, diseno<span class="sc">$</span>bloque), <span class="at">levels =</span> <span class="fu">paste0</span>(<span class="st">"B"</span>, <span class="dv">1</span><span class="sc">:</span>b))</span>
+<span id="cb30-97"><a href="#cb30-97" aria-hidden="true" tabindex="-1"></a>diseno<span class="sc">$</span>tratamiento <span class="ot">&lt;-</span> <span class="fu">factor</span>(diseno<span class="sc">$</span>tratamiento, <span class="at">levels =</span> tratamientos)</span>
+<span id="cb30-98"><a href="#cb30-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-99"><a href="#cb30-99" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">&lt;-</span> efecto_logit[<span class="fu">as.integer</span>(diseno<span class="sc">$</span>tratamiento)] <span class="sc">+</span></span>
+<span id="cb30-100"><a href="#cb30-100" aria-hidden="true" tabindex="-1"></a>  efecto_bloque[<span class="fu">as.integer</span>(diseno<span class="sc">$</span>bloque)] <span class="sc">+</span></span>
+<span id="cb30-101"><a href="#cb30-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rnorm</span>(<span class="fu">nrow</span>(diseno), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb30-102"><a href="#cb30-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-103"><a href="#cb30-103" aria-hidden="true" tabindex="-1"></a>diseno<span class="sc">$</span>prop <span class="ot">&lt;-</span> <span class="fu">plogis</span>(eta)   <span class="co"># proporción en (0, 1)</span></span>
+<span id="cb30-104"><a href="#cb30-104" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(diseno, <span class="dv">8</span>)</span>
+<span id="cb30-105"><a href="#cb30-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-106"><a href="#cb30-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-107"><a href="#cb30-107" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb30-108"><a href="#cb30-108" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sobre la semilla</span></span>
+<span id="cb30-109"><a href="#cb30-109" aria-hidden="true" tabindex="-1"></a>Se probaron varias semillas y se escogió la **34**. Esta semilla produce residuales claramente no normales. Con otras semillas la normalidad puede no fallar con solo 48 parcelas. En un estudio real no se escoge la semilla: se diagnostica lo que salga.</span>
+<span id="cb30-110"><a href="#cb30-110" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb30-111"><a href="#cb30-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-114"><a href="#cb30-114" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-115"><a href="#cb30-115" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: boxplot-dbca</span></span>
+<span id="cb30-116"><a href="#cb30-116" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(prop <span class="sc">~</span> tratamiento, <span class="at">data =</span> diseno,</span>
+<span id="cb30-117"><a href="#cb30-117" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"#ffcdd2"</span>, <span class="st">"#c8e6c9"</span>, <span class="st">"#a5d6a7"</span>, <span class="st">"#81c784"</span>),</span>
+<span id="cb30-118"><a href="#cb30-118" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Proporción de área foliar afectada"</span>, <span class="at">xlab =</span> <span class="st">"Tratamiento"</span>,</span>
+<span id="cb30-119"><a href="#cb30-119" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Severidad del tizón por tratamiento"</span>)</span>
+<span id="cb30-120"><a href="#cb30-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-121"><a href="#cb30-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-122"><a href="#cb30-122" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb30-123"><a href="#cb30-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-124"><a href="#cb30-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Análisis con la respuesta original</span></span>
+<span id="cb30-125"><a href="#cb30-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-128"><a href="#cb30-128" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-129"><a href="#cb30-129" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: anova-original</span></span>
+<span id="cb30-130"><a href="#cb30-130" aria-hidden="true" tabindex="-1"></a>m_crudo <span class="ot">&lt;-</span> <span class="fu">lm</span>(prop <span class="sc">~</span> bloque <span class="sc">+</span> tratamiento, <span class="at">data =</span> diseno)</span>
+<span id="cb30-131"><a href="#cb30-131" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(m_crudo)</span>
+<span id="cb30-132"><a href="#cb30-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-133"><a href="#cb30-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-134"><a href="#cb30-134" aria-hidden="true" tabindex="-1"></a><span class="fu">### Diagnóstico de los residuales</span></span>
+<span id="cb30-135"><a href="#cb30-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-138"><a href="#cb30-138" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-139"><a href="#cb30-139" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: diag-original</span></span>
+<span id="cb30-140"><a href="#cb30-140" aria-hidden="true" tabindex="-1"></a>d_crudo <span class="ot">&lt;-</span> <span class="fu">diagnostico</span>(m_crudo, diseno<span class="sc">$</span>tratamiento)</span>
+<span id="cb30-141"><a href="#cb30-141" aria-hidden="true" tabindex="-1"></a>d_crudo<span class="sc">$</span>normalidad</span>
+<span id="cb30-142"><a href="#cb30-142" aria-hidden="true" tabindex="-1"></a>d_crudo<span class="sc">$</span>levene</span>
+<span id="cb30-143"><a href="#cb30-143" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-144"><a href="#cb30-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-147"><a href="#cb30-147" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-148"><a href="#cb30-148" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: graf-original</span></span>
+<span id="cb30-149"><a href="#cb30-149" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4</span></span>
+<span id="cb30-150"><a href="#cb30-150" aria-hidden="true" tabindex="-1"></a><span class="fu">graficos_diagnostico</span>(m_crudo)</span>
+<span id="cb30-151"><a href="#cb30-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-152"><a href="#cb30-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-153"><a href="#cb30-153" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
+<span id="cb30-154"><a href="#cb30-154" aria-hidden="true" tabindex="-1"></a><span class="fu">## Los residuales no son normales</span></span>
+<span id="cb30-155"><a href="#cb30-155" aria-hidden="true" tabindex="-1"></a>Las tres pruebas de normalidad rechazan el supuesto. El gráfico Q-Q muestra puntos extremos que se alejan de la recta, sobre todo arriba. El gráfico de residuales muestra que la dispersión crece con el valor ajustado. El ANOVA sobre la proporción original **no es confiable**. Hace falta una transformación.</span>
+<span id="cb30-156"><a href="#cb30-156" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb30-157"><a href="#cb30-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-158"><a href="#cb30-158" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb30-159"><a href="#cb30-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-160"><a href="#cb30-160" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Transformación tipo Johnson</span></span>
+<span id="cb30-161"><a href="#cb30-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-162"><a href="#cb30-162" aria-hidden="true" tabindex="-1"></a><span class="fu">### La idea</span></span>
+<span id="cb30-163"><a href="#cb30-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-164"><a href="#cb30-164" aria-hidden="true" tabindex="-1"></a>El sistema de Johnson lleva una variable no normal a una normal con una función de tres familias:</span>
+<span id="cb30-165"><a href="#cb30-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-166"><a href="#cb30-166" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Familia <span class="pp">|</span> Transformación <span class="pp">|</span> Cuándo se usa <span class="pp">|</span></span>
+<span id="cb30-167"><a href="#cb30-167" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb30-168"><a href="#cb30-168" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **SB** (acotada) | $z = \gamma + \delta \ln\!\dfrac{y-\xi}{\xi+\lambda-y}$ | La variable vive en un intervalo $(\xi,\ \xi+\lambda)$. **Es el caso de las proporciones.** <span class="pp">|</span></span>
+<span id="cb30-169"><a href="#cb30-169" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **SL** (log-normal) <span class="pp">|</span> $z = \gamma + \delta \ln(y-\xi)$ <span class="pp">|</span> La variable tiene un límite inferior y cola derecha. <span class="pp">|</span></span>
+<span id="cb30-170"><a href="#cb30-170" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **SU** (no acotada) <span class="pp">|</span> $z = \gamma + \delta\, \mathrm{asinh}<span class="sc">\!</span>\dfrac{y-\xi}{\lambda}$ <span class="pp">|</span> La variable no tiene límites. <span class="pp">|</span></span>
+<span id="cb30-171"><a href="#cb30-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-172"><a href="#cb30-172" aria-hidden="true" tabindex="-1"></a>Los parámetros $\gamma$ y $\delta$ centran y escalan. Los parámetros $\xi$ y $\lambda$ fijan la **posición** y la **amplitud** del intervalo.</span>
+<span id="cb30-173"><a href="#cb30-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-174"><a href="#cb30-174" aria-hidden="true" tabindex="-1"></a><span class="fu">### La función</span></span>
+<span id="cb30-175"><a href="#cb30-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-176"><a href="#cb30-176" aria-hidden="true" tabindex="-1"></a>El paquete <span class="in">`Johnson`</span> no siempre está disponible. Esta función en R base ajusta las tres familias. Elige la familia y los parámetros que **maximizan el estadístico W de Shapiro–Wilk** de la variable transformada.</span>
+<span id="cb30-177"><a href="#cb30-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-180"><a href="#cb30-180" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-181"><a href="#cb30-181" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: funcion-johnson</span></span>
+<span id="cb30-182"><a href="#cb30-182" aria-hidden="true" tabindex="-1"></a>johnson_transformar <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb30-183"><a href="#cb30-183" aria-hidden="true" tabindex="-1"></a>  xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(x); xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(x); rango <span class="ot">&lt;-</span> xmax <span class="sc">-</span> xmin</span>
+<span id="cb30-184"><a href="#cb30-184" aria-hidden="true" tabindex="-1"></a>  W   <span class="ot">&lt;-</span> <span class="cf">function</span>(v) <span class="cf">if</span> (<span class="fu">any</span>(<span class="sc">!</span><span class="fu">is.finite</span>(v))) <span class="dv">0</span> <span class="cf">else</span> <span class="fu">unname</span>(<span class="fu">shapiro.test</span>(v)<span class="sc">$</span>statistic)</span>
+<span id="cb30-185"><a href="#cb30-185" aria-hidden="true" tabindex="-1"></a>  lim <span class="ot">&lt;-</span> <span class="cf">function</span>(p) <span class="fu">pmin</span>(<span class="fu">pmax</span>(p, <span class="sc">-</span><span class="dv">10</span>), <span class="dv">6</span>)</span>
+<span id="cb30-186"><a href="#cb30-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-187"><a href="#cb30-187" aria-hidden="true" tabindex="-1"></a>  <span class="co"># SB: límites a, b fuera del rango observado</span></span>
+<span id="cb30-188"><a href="#cb30-188" aria-hidden="true" tabindex="-1"></a>  f_sb <span class="ot">&lt;-</span> <span class="cf">function</span>(p, x) {</span>
+<span id="cb30-189"><a href="#cb30-189" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">lim</span>(p); a <span class="ot">&lt;-</span> xmin <span class="sc">-</span> <span class="fu">exp</span>(p[<span class="dv">1</span>]) <span class="sc">*</span> rango; b <span class="ot">&lt;-</span> xmax <span class="sc">+</span> <span class="fu">exp</span>(p[<span class="dv">2</span>]) <span class="sc">*</span> rango</span>
+<span id="cb30-190"><a href="#cb30-190" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> (x <span class="sc">-</span> a) <span class="sc">/</span> (b <span class="sc">-</span> a); <span class="fu">log</span>(u <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> u))</span>
+<span id="cb30-191"><a href="#cb30-191" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb30-192"><a href="#cb30-192" aria-hidden="true" tabindex="-1"></a>  o_sb <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="fu">log</span>(.<span class="dv">05</span>), <span class="fu">log</span>(.<span class="dv">05</span>)), <span class="cf">function</span>(p) <span class="sc">-</span><span class="fu">W</span>(<span class="fu">f_sb</span>(p, x)), <span class="at">method =</span> <span class="st">"Nelder-Mead"</span>)</span>
+<span id="cb30-193"><a href="#cb30-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-194"><a href="#cb30-194" aria-hidden="true" tabindex="-1"></a>  <span class="co"># SL: log-normal desplazada</span></span>
+<span id="cb30-195"><a href="#cb30-195" aria-hidden="true" tabindex="-1"></a>  f_sl <span class="ot">&lt;-</span> <span class="cf">function</span>(p, x) <span class="fu">log</span>(x <span class="sc">-</span> (xmin <span class="sc">-</span> <span class="fu">exp</span>(<span class="fu">lim</span>(p)) <span class="sc">*</span> rango))</span>
+<span id="cb30-196"><a href="#cb30-196" aria-hidden="true" tabindex="-1"></a>  o_sl <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">log</span>(.<span class="dv">05</span>), <span class="cf">function</span>(p) <span class="sc">-</span><span class="fu">W</span>(<span class="fu">f_sl</span>(p, x)),</span>
+<span id="cb30-197"><a href="#cb30-197" aria-hidden="true" tabindex="-1"></a>                <span class="at">method =</span> <span class="st">"Brent"</span>, <span class="at">lower =</span> <span class="sc">-</span><span class="dv">10</span>, <span class="at">upper =</span> <span class="dv">6</span>)</span>
+<span id="cb30-198"><a href="#cb30-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-199"><a href="#cb30-199" aria-hidden="true" tabindex="-1"></a>  <span class="co"># SU: no acotada</span></span>
+<span id="cb30-200"><a href="#cb30-200" aria-hidden="true" tabindex="-1"></a>  f_su <span class="ot">&lt;-</span> <span class="cf">function</span>(p, x) <span class="fu">asinh</span>((x <span class="sc">-</span> p[<span class="dv">1</span>]) <span class="sc">/</span> <span class="fu">exp</span>(p[<span class="dv">2</span>]))</span>
+<span id="cb30-201"><a href="#cb30-201" aria-hidden="true" tabindex="-1"></a>  o_su <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="fu">median</span>(x), <span class="fu">log</span>(<span class="fu">sd</span>(x))), <span class="cf">function</span>(p) <span class="sc">-</span><span class="fu">W</span>(<span class="fu">f_su</span>(p, x)), <span class="at">method =</span> <span class="st">"Nelder-Mead"</span>)</span>
+<span id="cb30-202"><a href="#cb30-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-203"><a href="#cb30-203" aria-hidden="true" tabindex="-1"></a>  cand <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">SB =</span> <span class="fu">list</span>(<span class="at">o =</span> o_sb, <span class="at">f =</span> f_sb),</span>
+<span id="cb30-204"><a href="#cb30-204" aria-hidden="true" tabindex="-1"></a>               <span class="at">SL =</span> <span class="fu">list</span>(<span class="at">o =</span> o_sl, <span class="at">f =</span> f_sl),</span>
+<span id="cb30-205"><a href="#cb30-205" aria-hidden="true" tabindex="-1"></a>               <span class="at">SU =</span> <span class="fu">list</span>(<span class="at">o =</span> o_su, <span class="at">f =</span> f_su))</span>
+<span id="cb30-206"><a href="#cb30-206" aria-hidden="true" tabindex="-1"></a>  Ws   <span class="ot">&lt;-</span> <span class="fu">sapply</span>(cand, <span class="cf">function</span>(k) <span class="sc">-</span>k<span class="sc">$</span>o<span class="sc">$</span>value)</span>
+<span id="cb30-207"><a href="#cb30-207" aria-hidden="true" tabindex="-1"></a>  tipo <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">which.max</span>(Ws))</span>
+<span id="cb30-208"><a href="#cb30-208" aria-hidden="true" tabindex="-1"></a>  p    <span class="ot">&lt;-</span> cand[[tipo]]<span class="sc">$</span>o<span class="sc">$</span>par</span>
+<span id="cb30-209"><a href="#cb30-209" aria-hidden="true" tabindex="-1"></a>  crudo <span class="ot">&lt;-</span> cand[[tipo]]<span class="sc">$</span><span class="fu">f</span>(p, x)</span>
+<span id="cb30-210"><a href="#cb30-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-211"><a href="#cb30-211" aria-hidden="true" tabindex="-1"></a>  delta <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">sd</span>(crudo)          <span class="co"># escala</span></span>
+<span id="cb30-212"><a href="#cb30-212" aria-hidden="true" tabindex="-1"></a>  gamma <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">mean</span>(crudo) <span class="sc">*</span> delta   <span class="co"># centro</span></span>
+<span id="cb30-213"><a href="#cb30-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-214"><a href="#cb30-214" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Parámetros de posición y amplitud (xi, lambda)</span></span>
+<span id="cb30-215"><a href="#cb30-215" aria-hidden="true" tabindex="-1"></a>  pars <span class="ot">&lt;-</span> <span class="cf">switch</span>(tipo,</span>
+<span id="cb30-216"><a href="#cb30-216" aria-hidden="true" tabindex="-1"></a>    <span class="at">SB =</span> <span class="fu">c</span>(<span class="at">xi =</span> xmin <span class="sc">-</span> <span class="fu">exp</span>(<span class="fu">lim</span>(p)[<span class="dv">1</span>]) <span class="sc">*</span> rango,</span>
+<span id="cb30-217"><a href="#cb30-217" aria-hidden="true" tabindex="-1"></a>           <span class="at">lambda =</span> (xmax <span class="sc">+</span> <span class="fu">exp</span>(<span class="fu">lim</span>(p)[<span class="dv">2</span>]) <span class="sc">*</span> rango) <span class="sc">-</span> (xmin <span class="sc">-</span> <span class="fu">exp</span>(<span class="fu">lim</span>(p)[<span class="dv">1</span>]) <span class="sc">*</span> rango)),</span>
+<span id="cb30-218"><a href="#cb30-218" aria-hidden="true" tabindex="-1"></a>    <span class="at">SL =</span> <span class="fu">c</span>(<span class="at">xi =</span> xmin <span class="sc">-</span> <span class="fu">exp</span>(<span class="fu">lim</span>(p)) <span class="sc">*</span> rango, <span class="at">lambda =</span> <span class="cn">NA</span>),</span>
+<span id="cb30-219"><a href="#cb30-219" aria-hidden="true" tabindex="-1"></a>    <span class="at">SU =</span> <span class="fu">c</span>(<span class="at">xi =</span> p[<span class="dv">1</span>], <span class="at">lambda =</span> <span class="fu">exp</span>(p[<span class="dv">2</span>])))</span>
+<span id="cb30-220"><a href="#cb30-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-221"><a href="#cb30-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">tipo =</span> tipo, <span class="at">W_por_familia =</span> Ws, <span class="at">gamma =</span> gamma, <span class="at">delta =</span> delta,</span>
+<span id="cb30-222"><a href="#cb30-222" aria-hidden="true" tabindex="-1"></a>       <span class="at">xi =</span> <span class="fu">unname</span>(pars[<span class="st">"xi"</span>]), <span class="at">lambda =</span> <span class="fu">unname</span>(pars[<span class="st">"lambda"</span>]),</span>
+<span id="cb30-223"><a href="#cb30-223" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> gamma <span class="sc">+</span> delta <span class="sc">*</span> crudo)</span>
+<span id="cb30-224"><a href="#cb30-224" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-225"><a href="#cb30-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-226"><a href="#cb30-226" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformación inversa: de la escala z a la escala original</span></span>
+<span id="cb30-227"><a href="#cb30-227" aria-hidden="true" tabindex="-1"></a>johnson_inversa <span class="ot">&lt;-</span> <span class="cf">function</span>(j, z) {</span>
+<span id="cb30-228"><a href="#cb30-228" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> (z <span class="sc">-</span> j<span class="sc">$</span>gamma) <span class="sc">/</span> j<span class="sc">$</span>delta</span>
+<span id="cb30-229"><a href="#cb30-229" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span>(j<span class="sc">$</span>tipo,</span>
+<span id="cb30-230"><a href="#cb30-230" aria-hidden="true" tabindex="-1"></a>    <span class="at">SB =</span> j<span class="sc">$</span>xi <span class="sc">+</span> j<span class="sc">$</span>lambda <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>s)),</span>
+<span id="cb30-231"><a href="#cb30-231" aria-hidden="true" tabindex="-1"></a>    <span class="at">SL =</span> j<span class="sc">$</span>xi <span class="sc">+</span> <span class="fu">exp</span>(s),</span>
+<span id="cb30-232"><a href="#cb30-232" aria-hidden="true" tabindex="-1"></a>    <span class="at">SU =</span> j<span class="sc">$</span>xi <span class="sc">+</span> j<span class="sc">$</span>lambda <span class="sc">*</span> <span class="fu">sinh</span>(s))</span>
+<span id="cb30-233"><a href="#cb30-233" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-234"><a href="#cb30-234" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-235"><a href="#cb30-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-236"><a href="#cb30-236" aria-hidden="true" tabindex="-1"></a><span class="fu">### Aplicación a la proporción</span></span>
+<span id="cb30-237"><a href="#cb30-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-240"><a href="#cb30-240" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-241"><a href="#cb30-241" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: aplicar-johnson</span></span>
+<span id="cb30-242"><a href="#cb30-242" aria-hidden="true" tabindex="-1"></a>j <span class="ot">&lt;-</span> <span class="fu">johnson_transformar</span>(diseno<span class="sc">$</span>prop)</span>
+<span id="cb30-243"><a href="#cb30-243" aria-hidden="true" tabindex="-1"></a>diseno<span class="sc">$</span>prop_j <span class="ot">&lt;-</span> j<span class="sc">$</span>y</span>
+<span id="cb30-244"><a href="#cb30-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-245"><a href="#cb30-245" aria-hidden="true" tabindex="-1"></a>j<span class="sc">$</span>tipo</span>
+<span id="cb30-246"><a href="#cb30-246" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(j<span class="sc">$</span>W_por_familia, <span class="dv">4</span>)</span>
+<span id="cb30-247"><a href="#cb30-247" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">gamma =</span> j<span class="sc">$</span>gamma, <span class="at">delta =</span> j<span class="sc">$</span>delta, <span class="at">xi =</span> j<span class="sc">$</span>xi, <span class="at">lambda =</span> j<span class="sc">$</span>lambda), <span class="dv">4</span>)</span>
+<span id="cb30-248"><a href="#cb30-248" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-249"><a href="#cb30-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-250"><a href="#cb30-250" aria-hidden="true" tabindex="-1"></a>La familia elegida es **SB**. Esto tiene sentido: la proporción es una variable acotada.</span>
+<span id="cb30-251"><a href="#cb30-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-252"><a href="#cb30-252" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb30-253"><a href="#cb30-253" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dos advertencias</span></span>
+<span id="cb30-254"><a href="#cb30-254" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>La función ajusta los parámetros sobre **toda la respuesta**, no sobre los residuales. Es la práctica habitual de los programas estadísticos.</span>
+<span id="cb30-255"><a href="#cb30-255" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Al maximizar W en la misma muestra, el resultado es algo optimista. Use la transformación como ayuda, no como prueba de normalidad.</span>
+<span id="cb30-256"><a href="#cb30-256" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb30-257"><a href="#cb30-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-258"><a href="#cb30-258" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb30-259"><a href="#cb30-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-260"><a href="#cb30-260" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Análisis con la respuesta transformada</span></span>
+<span id="cb30-261"><a href="#cb30-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-264"><a href="#cb30-264" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-265"><a href="#cb30-265" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: anova-johnson</span></span>
+<span id="cb30-266"><a href="#cb30-266" aria-hidden="true" tabindex="-1"></a>m_j <span class="ot">&lt;-</span> <span class="fu">lm</span>(prop_j <span class="sc">~</span> bloque <span class="sc">+</span> tratamiento, <span class="at">data =</span> diseno)</span>
+<span id="cb30-267"><a href="#cb30-267" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(m_j)</span>
+<span id="cb30-268"><a href="#cb30-268" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-269"><a href="#cb30-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-272"><a href="#cb30-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-273"><a href="#cb30-273" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: diag-johnson</span></span>
+<span id="cb30-274"><a href="#cb30-274" aria-hidden="true" tabindex="-1"></a>d_j <span class="ot">&lt;-</span> <span class="fu">diagnostico</span>(m_j, diseno<span class="sc">$</span>tratamiento)</span>
+<span id="cb30-275"><a href="#cb30-275" aria-hidden="true" tabindex="-1"></a>d_j<span class="sc">$</span>normalidad</span>
+<span id="cb30-276"><a href="#cb30-276" aria-hidden="true" tabindex="-1"></a>d_j<span class="sc">$</span>levene</span>
+<span id="cb30-277"><a href="#cb30-277" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-278"><a href="#cb30-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-281"><a href="#cb30-281" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-282"><a href="#cb30-282" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: graf-johnson</span></span>
+<span id="cb30-283"><a href="#cb30-283" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4</span></span>
+<span id="cb30-284"><a href="#cb30-284" aria-hidden="true" tabindex="-1"></a><span class="fu">graficos_diagnostico</span>(m_j)</span>
+<span id="cb30-285"><a href="#cb30-285" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-286"><a href="#cb30-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-287"><a href="#cb30-287" aria-hidden="true" tabindex="-1"></a>Compare con la sección 4. Los valores p de normalidad suben. El gráfico Q-Q se acerca a la recta.</span>
+<span id="cb30-288"><a href="#cb30-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-289"><a href="#cb30-289" aria-hidden="true" tabindex="-1"></a><span class="fu">### Medias en la escala original</span></span>
+<span id="cb30-290"><a href="#cb30-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-291"><a href="#cb30-291" aria-hidden="true" tabindex="-1"></a>El resultado se debe reportar en la escala de la proporción. Se promedia en la escala transformada y se aplica la función inversa.</span>
+<span id="cb30-292"><a href="#cb30-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-295"><a href="#cb30-295" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-296"><a href="#cb30-296" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: medias-johnson</span></span>
+<span id="cb30-297"><a href="#cb30-297" aria-hidden="true" tabindex="-1"></a>medias_z <span class="ot">&lt;-</span> <span class="fu">tapply</span>(diseno<span class="sc">$</span>prop_j, diseno<span class="sc">$</span>tratamiento, mean)</span>
+<span id="cb30-298"><a href="#cb30-298" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb30-299"><a href="#cb30-299" aria-hidden="true" tabindex="-1"></a>  <span class="at">tratamiento =</span> <span class="fu">names</span>(medias_z),</span>
+<span id="cb30-300"><a href="#cb30-300" aria-hidden="true" tabindex="-1"></a>  <span class="at">media_z     =</span> <span class="fu">round</span>(<span class="fu">as.numeric</span>(medias_z), <span class="dv">3</span>),</span>
+<span id="cb30-301"><a href="#cb30-301" aria-hidden="true" tabindex="-1"></a>  <span class="at">proporcion  =</span> <span class="fu">round</span>(<span class="fu">johnson_inversa</span>(j, <span class="fu">as.numeric</span>(medias_z)), <span class="dv">4</span>)</span>
+<span id="cb30-302"><a href="#cb30-302" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-303"><a href="#cb30-303" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-304"><a href="#cb30-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-305"><a href="#cb30-305" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb30-306"><a href="#cb30-306" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpretación</span></span>
+<span id="cb30-307"><a href="#cb30-307" aria-hidden="true" tabindex="-1"></a>La media retro-transformada se parece a una **mediana**, no a la media aritmética. Dígalo en el informe.</span>
+<span id="cb30-308"><a href="#cb30-308" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb30-309"><a href="#cb30-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-310"><a href="#cb30-310" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb30-311"><a href="#cb30-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-312"><a href="#cb30-312" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7. ¿Valió la pena bloquear?</span></span>
+<span id="cb30-313"><a href="#cb30-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-314"><a href="#cb30-314" aria-hidden="true" tabindex="-1"></a>La **eficiencia relativa** compara el DBCA con un DCA hipotético:</span>
+<span id="cb30-315"><a href="#cb30-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-316"><a href="#cb30-316" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb30-317"><a href="#cb30-317" aria-hidden="true" tabindex="-1"></a>ER = \frac{(b-1)\,CM_{\text{bloque}} + b\,(t-1)\,CM_{\text{error}}}{(bt-1)\,CM_{\text{error}}}</span>
+<span id="cb30-318"><a href="#cb30-318" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb30-319"><a href="#cb30-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-320"><a href="#cb30-320" aria-hidden="true" tabindex="-1"></a>Una $ER &gt; 1$ indica que el DCA habría necesitado **más réplicas** para igualar la precisión del DBCA. Por ejemplo, una $ER = 1{,}5$ significa que el DCA necesitaría un 50 % más de parcelas por tratamiento.</span>
+<span id="cb30-321"><a href="#cb30-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-324"><a href="#cb30-324" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb30-325"><a href="#cb30-325" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: eficiencia-relativa</span></span>
+<span id="cb30-326"><a href="#cb30-326" aria-hidden="true" tabindex="-1"></a>tab  <span class="ot">&lt;-</span> <span class="fu">anova</span>(m_j)</span>
+<span id="cb30-327"><a href="#cb30-327" aria-hidden="true" tabindex="-1"></a>CMB  <span class="ot">&lt;-</span> tab[<span class="st">"bloque"</span>, <span class="st">"Mean Sq"</span>]</span>
+<span id="cb30-328"><a href="#cb30-328" aria-hidden="true" tabindex="-1"></a>CME  <span class="ot">&lt;-</span> tab[<span class="st">"Residuals"</span>, <span class="st">"Mean Sq"</span>]</span>
+<span id="cb30-329"><a href="#cb30-329" aria-hidden="true" tabindex="-1"></a>t_   <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb30-330"><a href="#cb30-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-331"><a href="#cb30-331" aria-hidden="true" tabindex="-1"></a>ER <span class="ot">&lt;-</span> ((b <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> CMB <span class="sc">+</span> b <span class="sc">*</span> (t_ <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> CME) <span class="sc">/</span> ((b <span class="sc">*</span> t_ <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> CME)</span>
+<span id="cb30-332"><a href="#cb30-332" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(ER, <span class="dv">3</span>)</span>
+<span id="cb30-333"><a href="#cb30-333" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb30-334"><a href="#cb30-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-335"><a href="#cb30-335" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb30-336"><a href="#cb30-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-337"><a href="#cb30-337" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8. Alternativas a Johnson</span></span>
+<span id="cb30-338"><a href="#cb30-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-339"><a href="#cb30-339" aria-hidden="true" tabindex="-1"></a>Johnson no es la única opción para una proporción.</span>
+<span id="cb30-340"><a href="#cb30-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-341"><a href="#cb30-341" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Opción <span class="pp">|</span> Idea <span class="pp">|</span> Nota <span class="pp">|</span></span>
+<span id="cb30-342"><a href="#cb30-342" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb30-343"><a href="#cb30-343" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Logit** <span class="pp">|</span> $\ln\frac{y}{1-y}$ <span class="pp">|</span> Simple. Falla si hay ceros o unos exactos. <span class="pp">|</span></span>
+<span id="cb30-344"><a href="#cb30-344" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Arcoseno–raíz** <span class="pp">|</span> $\arcsin\sqrt{y}$ <span class="pp">|</span> Tradicional en agronomía. Hoy se desaconseja. <span class="pp">|</span></span>
+<span id="cb30-345"><a href="#cb30-345" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Regresión beta** <span class="pp">|</span> Modelo con distribución beta <span class="pp">|</span> Modela la proporción sin transformar. Paquete <span class="in">`betareg`</span>. <span class="pp">|</span></span>
+<span id="cb30-346"><a href="#cb30-346" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **GLM binomial** <span class="pp">|</span> Si hay conteos (n lesionadas de N) <span class="pp">|</span> Usa la información del denominador. <span class="pp">|</span></span>
+<span id="cb30-347"><a href="#cb30-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-348"><a href="#cb30-348" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb30-349"><a href="#cb30-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-350"><a href="#cb30-350" aria-hidden="true" tabindex="-1"></a><span class="fu">## 9. Ventajas y desventajas del DBCA</span></span>
+<span id="cb30-351"><a href="#cb30-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-352"><a href="#cb30-352" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="pp">|</span> Ventajas <span class="pp">|</span> Desventajas <span class="pp">|</span></span>
+<span id="cb30-353"><a href="#cb30-353" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb30-354"><a href="#cb30-354" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Precisión** <span class="pp">|</span> Separa la variación del gradiente. Reduce el error experimental. <span class="pp">|</span> Pierde GL del error: $(b-1)$ grados se van al bloque. <span class="pp">|</span></span>
+<span id="cb30-355"><a href="#cb30-355" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Validez** <span class="pp">|</span> Controla un gradiente conocido. Evita la confusión con el tratamiento. <span class="pp">|</span> Si el bloqueo es inútil, el diseño pierde potencia. <span class="pp">|</span></span>
+<span id="cb30-356"><a href="#cb30-356" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Flexibilidad** | Admite cualquier número de tratamientos. | Cada bloque debe contener **todos** los tratamientos. <span class="pp">|</span></span>
+<span id="cb30-357"><a href="#cb30-357" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Datos perdidos** <span class="pp">|</span> — <span class="pp">|</span> Una parcela perdida desbalancea el diseño. Exige estimar el dato faltante o usar un modelo mixto. <span class="pp">|</span></span>
+<span id="cb30-358"><a href="#cb30-358" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Supuestos** <span class="pp">|</span> — <span class="pp">|</span> Supone aditividad: sin interacción bloque × tratamiento. <span class="pp">|</span></span>
+<span id="cb30-359"><a href="#cb30-359" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Control local** | Controla **un** gradiente. <span class="pp">|</span> No controla un segundo gradiente. Para eso existe el cuadro latino. <span class="pp">|</span></span>
+<span id="cb30-360"><a href="#cb30-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-361"><a href="#cb30-361" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb30-362"><a href="#cb30-362" aria-hidden="true" tabindex="-1"></a><span class="fu">## Siguiente paso</span></span>
+<span id="cb30-363"><a href="#cb30-363" aria-hidden="true" tabindex="-1"></a>Continúe con **DCL**. Allí se controlan **dos** gradientes a la vez.</span>
+<span id="cb30-364"><a href="#cb30-364" aria-hidden="true" tabindex="-1"></a>:::</span>
+</code></pre></div><button title="Copiar al portapapeles" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

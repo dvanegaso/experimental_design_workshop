@@ -1,0 +1,32 @@
+/* Taller Diseño Experimental · estilos mínimos */
+
+:root {
+  --verde-campo: #2e7d32;
+  --verde-claro: #e8f5e9;
+}
+
+h1.title {
+  color: var(--verde-campo);
+}
+
+h2 {
+  border-bottom: 2px solid var(--verde-claro);
+  padding-bottom: 0.2rem;
+  margin-top: 2.2rem;
+}
+
+/* Tablas de ventajas y desventajas */
+table {
+  font-size: 0.95rem;
+}
+
+/* Bloque de código plegado */
+details > summary {
+  color: var(--verde-campo);
+  font-weight: 600;
+}
+
+/* Ecuaciones centradas con aire */
+.math.display {
+  margin: 1.2rem 0;
+}
